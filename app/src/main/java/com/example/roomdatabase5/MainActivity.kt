@@ -2,6 +2,7 @@ package com.example.roomdatabase5
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -16,12 +17,12 @@ import com.example.roomdatabase5.db.DBHelper
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    var contactList = listOf<ContactEntity>()
+    var contactList = arrayListOf<ContactEntity>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -29,16 +30,6 @@ class MainActivity : AppCompatActivity() {
             insets
 
         }
-
-        var db = DBHelper.checkDB(this)
-        contactList = db.dao().getAllContacts()
-
-
-        val adapter = contactAdapter(contactList)
-       // LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.rvdata.adapter = adapter
-     //   binding.rvdata.layoutManager = layoutManager
-
         binding.fbAdd.setOnClickListener {
 
             var intent = Intent(this,ContactActivity::class.java)
@@ -47,6 +38,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        val db = DBHelper.checkDB(this)
+        contactList = db.dao().getAllContacts() as ArrayList<ContactEntity>
+
+        val dataadapter = contactAdapter(contactList as ArrayList<ContactEntity>)
+        binding.rvdata.adapter = dataadapter
+
+    }
 
 
 

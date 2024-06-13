@@ -11,6 +11,8 @@ import com.example.roomdatabase5.db.ContactEntity
 import com.example.roomdatabase5.db.DBHelper
 
 class ContactActivity : AppCompatActivity() {
+    private var id : Int = 0
+    var name1 : String? = ""
     lateinit var binding: ActivityContactBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,8 +25,7 @@ class ContactActivity : AppCompatActivity() {
             insets
         }
 
-
-
+        getIntentData()
         val db = DBHelper.checkDB(this)
         binding.btnSave.setOnClickListener {
 
@@ -32,10 +33,32 @@ class ContactActivity : AppCompatActivity() {
             val phone = binding.edtphone.text.toString()
             val email = binding.edtemail.text.toString()
 
-            val model = ContactEntity(name = name, phone = phone, email = email)
-            db.dao().insertContact(model)
+            if (name1 == null || name1!!.isEmpty() ) {
+
+                val model = ContactEntity(name = name, phone = phone, email = email)
+                db.dao().insertContact(model)
+
+            }
+            else
+            {
+                val model = ContactEntity(name = name, phone = phone, email = email, id = id )
+                db.dao().updateContact(model)
+
+            }
             finish()
         }
+
+    }
+
+    private fun getIntentData() {
+        name1 = intent.getStringExtra("name")
+        val phone = intent.getStringExtra("phone")
+        val email = intent.getStringExtra("email")
+        id = intent.getIntExtra("id",0)
+
+        binding.edtname.setText(name1)
+        binding.edtphone.setText(phone)
+        binding.edtemail.setText(email)
 
     }
 }

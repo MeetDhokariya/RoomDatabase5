@@ -10,9 +10,12 @@
 
    <androidx.recyclerview.widget.RecyclerView
        android:layout_width="match_parent"
+       android:background="#73B895"
        android:layout_height="match_parent"
        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
        android:layout_margin="10dp"
+       android:padding="10dp"
+       android:orientation="vertical"
        android:id="@+id/rvdata">
    </androidx.recyclerview.widget.RecyclerView>
 
